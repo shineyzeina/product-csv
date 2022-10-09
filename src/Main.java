@@ -4,9 +4,8 @@ import java.util.Scanner;
 import java.util.HashMap;
 
 public class Main {
-    public static void createAvgCSV(double finalTotalRows, Path parentPath, Path fileName, HashMap<String, Integer>  nameTotal){
-
-        File csvFile0 = new File(parentPath + "//..//output/0_" + fileName);
+    public static void createAvgCSV(double finalTotalRows, String parentPath, Path fileName, HashMap<String, Integer>  nameTotal){
+        File csvFile0 = new File(parentPath + "/output/0_" + fileName);
         try{
         if (csvFile0.createNewFile()) {
             System.out.println("File created: " + csvFile0.getName());
@@ -29,9 +28,9 @@ public class Main {
             e.printStackTrace();
         }
     }
-    public static void createBrandSV(Path parentPath, Path fileName, HashMap<String, String> nameBrand ){
+    public static void createBrandSV(String parentPath, Path fileName, HashMap<String, String> nameBrand ){
 
-        File csvFile1 = new File(parentPath + "//..//output/1_" + fileName);
+        File csvFile1 = new File(parentPath + "/output/1_" + fileName);
         try{
             if (csvFile1.createNewFile()) {
                 System.out.println("File created: " + csvFile1.getName());
@@ -54,19 +53,16 @@ public class Main {
             e.printStackTrace();
         }
     }
-    public static void CreateResults(Path in_file_path){
+    public static void CreateResults(Path in_file_path, String parentPath){
         try{
             Path fileName = in_file_path.getFileName();
-            Path parentPath = in_file_path.getParent();
-            System.out.println("file name entered is " + fileName);
-
 
             int totalRows = 0;
             HashMap<String, Integer> nameTotal = new HashMap<>();
             HashMap<String, String> nameBrand = new HashMap<>();
 
 
-            Scanner csvFile = new Scanner(new File(String.valueOf(in_file_path)));
+            Scanner csvFile = new Scanner(new File(parentPath + in_file_path));
             csvFile.useDelimiter(",");
             while(csvFile.hasNext()){
                 String row = csvFile.nextLine();
@@ -94,17 +90,19 @@ public class Main {
     }
     public static  void main(String[] args) {
         try {
-            System.out.println("Running sample 1:");
-            CreateResults  (Path.of("C:\\Users\\zeina\\product\\samples\\day1.csv"));
+            File directory = new File("./");
+            String absPath = directory.getAbsolutePath();
+
+            CreateResults  (Path.of("/samples/day1.csv"), absPath);
 
             System.out.println("Running sample 2:");
-            CreateResults  (Path.of("C:\\Users\\zeina\\product\\samples\\day2.csv"));
+            CreateResults  (Path.of("/samples/day2.csv"), absPath);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             Path in_file_path;
             System.out.println("Enter file path:");
             in_file_path = Path.of(br.readLine());
-            CreateResults  (in_file_path);
+            CreateResults  (in_file_path,absPath);
         }
         catch (Error | IOException e){
             e.printStackTrace();
