@@ -4,8 +4,8 @@ import java.util.Scanner;
 import java.util.HashMap;
 
 public class Main {
-    public static void createAvgCSV(double finalTotalRows, String parentPath, Path fileName, HashMap<String, Integer>  nameTotal){
-        File csvFile0 = new File(parentPath + "/output/0_" + fileName);
+    public static void createAvgCSV(double finalTotalRows, Path parentPath, Path fileName, HashMap<String, Integer>  nameTotal){
+        File csvFile0 = new File(parentPath + "/../output/0_" + fileName);
         try{
         if (csvFile0.createNewFile()) {
             System.out.println("File created: " + csvFile0.getName());
@@ -28,9 +28,9 @@ public class Main {
             e.printStackTrace();
         }
     }
-    public static void createBrandSV(String parentPath, Path fileName, HashMap<String, String> nameBrand ){
+    public static void createBrandSV(Path parentPath, Path fileName, HashMap<String, String> nameBrand ){
 
-        File csvFile1 = new File(parentPath + "/output/1_" + fileName);
+        File csvFile1 = new File(parentPath + "/../output/1_" + fileName);
         try{
             if (csvFile1.createNewFile()) {
                 System.out.println("File created: " + csvFile1.getName());
@@ -53,16 +53,17 @@ public class Main {
             e.printStackTrace();
         }
     }
-    public static void CreateResults(Path in_file_path, String parentPath){
+    public static void CreateResults(Path in_file_path){
         try{
             Path fileName = in_file_path.getFileName();
+            Path parentPath = in_file_path.getParent();
 
             int totalRows = 0;
             HashMap<String, Integer> nameTotal = new HashMap<>();
             HashMap<String, String> nameBrand = new HashMap<>();
 
 
-            Scanner csvFile = new Scanner(new File(parentPath + in_file_path));
+            Scanner csvFile = new Scanner(new File(String.valueOf(in_file_path)));
             csvFile.useDelimiter(",");
             while(csvFile.hasNext()){
                 String row = csvFile.nextLine();
@@ -92,17 +93,20 @@ public class Main {
         try {
             File directory = new File("./");
             String absPath = directory.getAbsolutePath();
+            File dir = new File(absPath + "/samples");
+            int sampleCount = 1;
+            for (File file : dir.listFiles()) {
+                System.out.println("Running sample" + sampleCount + " of file " + file + ": ");
 
-            CreateResults  (Path.of("/samples/day1.csv"), absPath);
-
-            System.out.println("Running sample 2:");
-            CreateResults  (Path.of("/samples/day2.csv"), absPath);
+                CreateResults(Path.of(String.valueOf(file)));
+                sampleCount++;
+            }
 
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             Path in_file_path;
             System.out.println("Enter file path:");
             in_file_path = Path.of(br.readLine());
-            CreateResults  (in_file_path,absPath);
+            CreateResults  (in_file_path);
         }
         catch (Error | IOException e){
             e.printStackTrace();
